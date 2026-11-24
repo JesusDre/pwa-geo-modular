@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Ubicación - PWA</title>
+
+  <!-- El manifest le dice al navegador que esta página se puede "instalar" -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2563eb">
+
+  <link rel="icon" href="./icono.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>📍 Reporte con Ubicación</h1>
+    <p>Práctica de Geolocalización Consciente y Reutilizable</p>
+  </header>
+
+  <main>
+
+    <!-- TARJETA 1: botón inicial -->
+    <section id="tarjetaInicio" class="tarjeta">
+      <p>Cuando mandes tu reporte, podemos adjuntar tu ubicación aproximada.</p>
+      <button id="botonAdjuntarUbicacion" class="boton-principal">
+        Adjuntar mi ubicación
+      </button>
+    </section>
+
+    <!-- TARJETA 2: pre-permiso (se muestra solo si hace falta) -->
+    <section id="tarjetaPrePermiso" class="tarjeta oculto">
+      <h2>¿Por qué pedimos tu ubicación?</h2>
+      <p>
+        Necesitamos tu ubicación aproximada para adjuntar las coordenadas
+        a tu reporte y saber qué tan cerca estás. Nunca compartimos tu
+        ubicación exacta con nadie más.
+      </p>
+      <button id="botonConfirmarUbicacion" class="boton-principal">
+        Sí, compartir mi ubicación
+      </button>
+      <button id="botonCancelarUbicacion" class="boton-secundario">
+        No, gracias
+      </button>
+    </section>
+
+    <!-- TARJETA 3: mientras esperamos la respuesta del GPS -->
+    <section id="tarjetaCargando" class="tarjeta oculto">
+      <p>⏳ Obteniendo tu ubicación, espera un momento...</p>
+    </section>
+
+    <!-- TARJETA 4: resultado con las coordenadas -->
+    <section id="tarjetaResultado" class="tarjeta oculto">
+      <h2>✅ Ubicación obtenida</h2>
+      <p>Latitud: <strong id="textoLatitud"></strong></p>
+      <p>Longitud: <strong id="textoLongitud"></strong></p>
+      <p>Precisión: <strong id="textoPrecision"></strong> metros</p>
+      <p id="etiquetaCalidad" class="etiqueta"></p>
+      <button id="botonReintentar" class="boton-secundario">
+        Volver a intentar
+      </button>
+    </section>
+
+    <!-- TARJETA 5: plan B, selector manual de zona -->
+    <section id="tarjetaManual" class="tarjeta oculto">
+      <h2>Ingresa tu zona manualmente</h2>
+      <p id="textoMotivoManual"></p>
+
+      <label for="selectorZona">Elige tu ciudad:</label>
+      <select id="selectorZona">
+        <option value="">-- Selecciona una ciudad --</option>
+        <option value="cdmx">Ciudad de México</option>
+        <option value="monterrey">Monterrey</option>
+        <option value="guadalajara">Guadalajara</option>
+        <option value="otra">Otra ciudad</option>
+      </select>
+
+      <button id="botonGuardarZona" class="boton-principal">Guardar zona</button>
+
+      <p id="textoConfirmacionZona" class="confirmacion oculto"></p>
+
+      <p class="ayuda">
+        ¿Cambiaste de opinión? Puedes activar el permiso de ubicación desde
+        los ajustes de tu navegador (ícono de 🔒 junto a la dirección web)
+        y luego presionar "Adjuntar mi ubicación" otra vez.
+      </p>
+    </section>
+
+    <!-- TARJETA 6: mensajes de error -->
+    <section id="tarjetaMensaje" class="tarjeta oculto tarjeta-error">
+      <p id="textoMensaje"></p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Tema 6.3 · Desarrollo de Aplicaciones Web Progresivas (PWA)</p>
+  </footer>
+
+  <!-- IMPORTANTE: geo-helper.js siempre se carga ANTES de app.js -->
+  <script src="./geo-helper.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

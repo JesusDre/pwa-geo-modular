@@ -1,0 +1,17 @@
+{
+  "name": "Reporte con Ubicación",
+  "short_name": "Geo PWA",
+  "description": "Práctica de geolocalización consciente y reutilizable para una PWA.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "./icono.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
