@@ -18,7 +18,8 @@ pwa-geo-modular/
 ├── app.js             Lógica de la pantalla: qué tarjeta mostrar y cuándo
 ├── sw.js              Service Worker: guarda los archivos para usarlos sin internet
 ├── manifest.json      Datos para poder "instalar" la app
-├── icono.svg          Ícono de la app
+├── icono.svg          Ícono (favicon)
+├── icons/             Íconos PNG 192 y 512 para instalar la app
 └── README.md          Este archivo
 ```
 
@@ -28,7 +29,7 @@ Cada archivo hace **una sola cosa**:
   dos funciones que cualquier parte de la app puede usar:
   - `obtenerUbicacionActual(opciones)` → regresa una Promesa con
     `{ latitud, longitud, precisionMetros, timestamp }`.
-  - `consultarEstadoPermisoDeUbicacion()` → regresa una Promesa con
+  - `consultarEstadoPermisoGeo()` → regresa una Promesa con
     `'granted'`, `'denied'` o `'prompt'`.
 - **`app.js`** solo se encarga de la interfaz: muestra y oculta tarjetas,
   y le pide ayuda a `geo-helper.js` cuando el usuario presiona un botón.
@@ -51,7 +52,7 @@ ejemplo, un check-in o un mapa de sucursales), bastaría con llamar a
 
 1. El usuario ve un botón **"Adjuntar mi ubicación"**. No se pide nada
    automáticamente al abrir la página.
-2. Al presionarlo, se consulta `consultarEstadoPermisoDeUbicacion()`:
+2. Al presionarlo, se consulta `consultarEstadoPermisoGeo()`:
    - `'granted'` → se pide la ubicación directo, sin mostrar explicación de
      nuevo.
    - `'prompt'` → se muestra una tarjeta explicando por qué se necesita la

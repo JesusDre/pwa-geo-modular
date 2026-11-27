@@ -1,67 +1,49 @@
-// =============================================================
-// sw.js (Service Worker)
-// -------------------------------------------------------------
-// El Service Worker guarda una copia ("caché") de los archivos
-// principales de la app para que puedan abrirse incluso sin
-// conexión a internet. No tiene nada que ver con el GPS, solo
-// se encarga de guardar y servir archivos.
-// =============================================================
+// sw.js - Service Worker (guarda los archivos para abrir sin internet)
 
-var NOMBRE_DEL_CACHE = 'pwa-geo-modular-v1';
+const CACHE_NAME = 'pwa-geo-modular-v2';
 
-// Lista de archivos que queremos guardar desde el primer momento.
-// IMPORTANTE: geo-helper.js va incluido aquí, como pide la práctica.
-var ARCHIVOS_DEL_APP_SHELL = [
+// geo-helper.js va en la lista, como pide la práctica
+const ARCHIVOS = [
   './',
   './index.html',
   './styles.css',
   './geo-helper.js',
   './app.js',
-  './manifest.json'
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
-
-// -------------------------------------------------------------
-// Evento "install": se dispara una sola vez, cuando el
-// navegador instala el Service Worker por primera vez.
-// -------------------------------------------------------------
-self.addEventListener('install', function (evento) {
-  evento.waitUntil(
-    caches.open(NOMBRE_DEL_CACHE).then(function (cache) {
-      return cache.addAll(ARCHIVOS_DEL_APP_SHELL);
+// install: guardar los archivos en caché
+self.addEventListener('install', function (event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.addAll(ARCHIVOS);
     })
   );
 });
 
-
-// -------------------------------------------------------------
-// Evento "fetch": se dispara cada vez que la página pide un
-// archivo (HTML, CSS, JS, etc). Primero buscamos en el caché;
-// si no está ahí, lo pedimos a internet como siempre.
-// -------------------------------------------------------------
-self.addEventListener('fetch', function (evento) {
-  evento.respondWith(
-    caches.match(evento.request).then(function (respuestaGuardada) {
-      return respuestaGuardada || fetch(evento.request);
-    })
-  );
-});
-
-
-// -------------------------------------------------------------
-// Evento "activate": limpia cachés viejos de versiones
-// anteriores de la app, para no acumular archivos de más.
-// -------------------------------------------------------------
-self.addEventListener('activate', function (evento) {
-  evento.waitUntil(
-    caches.keys().then(function (nombresDeCaches) {
-      return Promise.all(
-        nombresDeCaches.map(function (nombre) {
-          if (nombre !== NOMBRE_DEL_CACHE) {
-            return caches.delete(nombre);
-          }
+// activate: borrar cachés de versiones anteriores
+self.addEventListener('activate', function (event) {
+  event.waitUntil(
+    caches.keys().then(function (nombres) {
+      const borrados = nombres
+        .filter(function (nombre) {
+          return nombre !== CACHE_NAME;
         })
-      );
+        .map(function (nombre) {
+          return caches.delete(nombre);
+        });
+      return Promise.all(borrados);
+    })
+  );
+});
+
+// fetch: Cache First (primero caché, si no está, internet)
+self.addEventListener('fetch', function (event) {
+  event.respondWith(
+    caches.match(event.request).then(function (enCache) {
+      return enCache || fetch(event.request);
     })
   );
 });
